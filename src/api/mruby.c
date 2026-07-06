@@ -1135,7 +1135,9 @@ static void callMRubyTick(tic_mem* tic)
     {
         if (mrb_respond_to(mrb, mrb_top_self(mrb), mrb_intern_cstr(mrb, TicFunc)))
         {
+            int ai = mrb_gc_arena_save(mrb);
             mrb_funcall(mrb, mrb_top_self(mrb), TicFunc, 0);
+            mrb_gc_arena_restore(mrb, ai);
             catcherr(core);
         }
         else
