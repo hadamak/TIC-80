@@ -1158,7 +1158,9 @@ static void callMRubyBoot(tic_mem* tic)
     {
         if (mrb_respond_to(mrb, mrb_top_self(mrb), mrb_intern_cstr(mrb, BootFunc)))
         {
+            int ai = mrb_gc_arena_save(mrb);
             mrb_funcall(mrb, mrb_top_self(mrb), BootFunc, 0);
+            mrb_gc_arena_restore(mrb, ai);
             catcherr(core);
         }
     }
@@ -1171,7 +1173,9 @@ static void callMRubyIntCallback(tic_mem* tic, s32 value, void* data, const char
 
     if (mrb && mrb_respond_to(mrb, mrb_top_self(mrb), mrb_intern_cstr(mrb, name)))
     {
+        int ai = mrb_gc_arena_save(mrb);
         mrb_funcall(mrb, mrb_top_self(mrb), name, 1, mrb_fixnum_value(value));
+        mrb_gc_arena_restore(mrb, ai);
         catcherr(core);
     }
 }
